@@ -1,4 +1,4 @@
-from Tensor import Tensor
+from autogradnp.Tensor import Tensor
 import numpy as np
 
 
@@ -17,7 +17,7 @@ def test_add():
 
     somewhere_loss = Tensor([1, 2, 1, 2], autograd=True)
     d = somewhere_loss + y.grad
-    d.backward(Tensor([1, 10, 10, 1], autograd=True))
+    d.backward(Tensor([1, 10, 10, 1]))
     assert np.all(y.grad.grad.data == np.array([1, 10, 10, 1]))
     print("Test addition passed")
 

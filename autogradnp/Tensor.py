@@ -25,9 +25,8 @@ class Tensor(object):
 
     def all_children_grads_accounted_for(self):
         """
-        Checks weather a tensor has received correct number of gradients from each child
+        Checks whether a tensor has received correct number of gradients from each child
         Normally, whenever .backward() is called on a variable, it immediately calls .backward() on its parents
-
         """
         for id, cnt in self.children.items():
             if cnt != 0:
@@ -41,6 +40,10 @@ class Tensor(object):
         - grad_origin: Tensor
         """
         if self.autograd:
+
+            if grad is None:
+                grad = Tensor(np.ones_like(self.data))
+
             if grad_origin is not None:
                 if self.children[grad_origin.id] == 0:
                     raise Exception("Cannot backprop more than one")
@@ -126,7 +129,7 @@ class Tensor(object):
         """
         Element-wise subtraction of two Tensor
         :param other: Tensor
-        :return: Tensor difference of A - B
+        :return: Tensor
         """
         if self.autograd and other.autograd:
             return Tensor(
@@ -142,7 +145,7 @@ class Tensor(object):
         """
         Element-wise multiplication of two Tensor with same shape
         :param other: Tensor same shape with current Tensor
-        :return : Tensor result
+        :return : Tensor
         """
         if self.autograd and other.autograd:
             return Tensor(

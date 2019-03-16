@@ -1,12 +1,15 @@
-from Tensor import Tensor
+from autogradnp.Tensor import Tensor
 import numpy as np
 
-
+np.random.seed(9999)
 NUM_STEP = 10
 LR       = 0.1
 
 
 def main():
+    """
+    Didn't handle gradient explode (seed 2010)
+    """
     data = Tensor(np.array([[0, 0], [0, 1], [1, 0], [1, 1]]), autograd=True)
     target = Tensor(np.array([[0], [1], [0], [1]]), autograd=True)
 
@@ -25,5 +28,4 @@ def main():
         print(loss.data)
 
 
-if __name__ == '__main__':
-    main()
+main()
