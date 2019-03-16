@@ -95,6 +95,16 @@ class Tensor(object):
                     dim = int(self.creation_op.split("_")[1])
                     self.creators[0].backward(self.grad.sum(dim))
 
+                elif self.creation_op == "tanh":
+                    # 1 - tanh**2
+                    ones = Tensor(np.ones_like(self.grad.data))
+                    self.creators[0].backward(self.grad * (ones - (self * self)))
+
+                elif self.creation_op == "sigmoid":
+                    # sigmoid * (1 - sigmoid)
+                    ones = Tensor(np.ones_like(self.grad.data))
+                    self.creators[0].backward(self.grad * self * (ones - self))
+
     def __add__(self, other):
         """
         Add element-wise two Tensors
@@ -223,6 +233,30 @@ class Tensor(object):
             )
         else:
             return Tensor(self.data.sum(axis=dim))
+
+    def tanh(self):
+        if self.autograd:
+            return Tensor(
+                np.tanh(self.data),
+                autograd=True,
+                creators=[self],
+                creation_op="tanh"
+            )
+        else:
+            return Tensor(np.tanh(self.data))
+
+    def sigmoid(self):
+        value = 1 / (1 + np.exp(- self.data))
+
+        if self.autograd:
+            return Tensor(
+                value,
+                autograd=True,
+                creators=[self],
+                creation_op="sigmoid"
+            )
+        else:
+            return Tensor(value)
 
     def __repr__(self):
         return str(self.data.__repr__())

@@ -1,4 +1,4 @@
-from Tensor import Tensor
+from .Tensor import Tensor
 import numpy as np
 
 
@@ -58,5 +58,21 @@ class MSELoss(Layer):
     @staticmethod
     def forward(pred, target):
         return ((pred - target) * (pred - target)).sum(0)
+
+
+class Tanh(Layer):
+    def __init__(self):
+        super().__init__()
+
+    def forward(self, input):
+        return input.tanh()
+
+
+class Sigmoid(Layer):
+    def __init__(self):
+        super().__init__()
+
+    def forward(self, input):
+        return input.sigmoid()
 
 

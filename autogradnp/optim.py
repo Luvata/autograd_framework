@@ -1,4 +1,4 @@
-from Tensor import Tensor
+from .Tensor import Tensor
 
 
 class Optimizer(object):
